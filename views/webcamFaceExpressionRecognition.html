@@ -143,6 +143,14 @@
 
       const result = await faceapi.detectSingleFace(videoEl, options).withFaceExpressions()
 
+      const expressions = result && result.expressions ? result.expressions : null
+
+      const dominantExpression = Object.entries(expressions).reduce((max, current) => {
+        return current[1] > max[1] ? current : max;
+      });
+      
+      const [expressionName, expressionValue] = dominantExpression;
+
       updateTimeStats(Date.now() - ts)
 
       if (result) {
