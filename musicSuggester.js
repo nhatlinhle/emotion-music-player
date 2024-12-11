@@ -1,4 +1,4 @@
-import SpotifyWebApi from 'spotify-web-api-node';
+const SpotifyWebApi = require('spotify-web-api-node');
 
 const spotifyApi = new SpotifyWebApi({
     clientId: 'a76b22b0629d40a992d0fd86c4d50622',
@@ -7,6 +7,9 @@ const spotifyApi = new SpotifyWebApi({
 });
 
 const emotionMusicMap = {
+    neutral: 'ambient',
+    disgusted: 'punk',
+    fearful: 'dark-ambient',
     happy: 'pop',
     sad: 'blues',
     angry: 'rock',

@@ -5,7 +5,10 @@
   "author": "tommy",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "spotify-web-api-node": "^5.0.2"
   }
 }
