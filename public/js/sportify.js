@@ -120,7 +120,7 @@ async function createPlaylist(token, userId, playlistName) {
 
 async function searchTrackByEmotion(emotion) {
   const emotionMusicMap = {
-    neutral: 'ambient',
+    neutral: 'pop',
     disgusted: 'punk',
     fearful: 'classical',
     happy: 'pop',
@@ -142,13 +142,12 @@ async function searchTrackByEmotion(emotion) {
   return data;
 }
 
-searchTrackByEmotion('fearful')
-
 function displayPlaylistEmbed(playlist) {
   const playlistId = playlist.id;
-  const iframe = `
+  const iframeHtml = `
       <iframe 
-          src="https://open.spotify.com/embed/playlist/${playlistId}" 
+          id="spotify-iframe"
+          src="https://open.spotify.com/embed/playlist/${playlistId}?autoplay=true" 
           width="600" 
           height="580" 
           frameborder="0" 
@@ -156,7 +155,7 @@ function displayPlaylistEmbed(playlist) {
           allow="encrypted-media">
       </iframe>
   `;
-  document.getElementById('playlist-container').innerHTML = iframe;
+  document.getElementById('playlist-container').innerHTML = iframeHtml;
 }
 
 async function addTrackToPlaylist(trackId) {
@@ -182,5 +181,27 @@ async function addTrackToPlaylist(trackId) {
     }
   } catch (err) {
     console.error("Error adding track to playlist:", err);
+  }
+}
+
+async function getTracksFromPlaylist(playlistId) {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return data.items.map(item => item.track.id);
+    } else {
+      const error = await response.json();
+      console.error("Failed to fetch tracks from playlist:", error);
+      return [];
+    }
+  } catch (err) {
+    console.error("Error fetching tracks from playlist:", err);
+    return [];
   }
 }

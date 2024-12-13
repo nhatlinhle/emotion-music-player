@@ -51,18 +51,30 @@
     if (currentExpression) {
       emotionsTmp.push(currentExpression);
     }
-  }, 3000);
+  }, 2000);
 
-  setInterval(() => {
-    searchTrack('fearful')
-
+  setInterval(async () => {
     if (emotionsTmp.length > 0) {
       const averageEmotion = calculateAverageEmotion(emotionsTmp);
+      console.log(averageEmotion);
       emotionsTmp = [];
+      const currentTracks = await getTracksFromPlaylist(paylistGlobal.id)
 
-      const track = searchTrackByEmotion(averageEmotion?.emotion)
+      const tracks = await searchTrackByEmotion(averageEmotion?.emotion)
+
+      if (tracks && tracks.tracks && tracks.tracks.items.length > 0) {
+        const newTrack = tracks.tracks.items.find(
+          track => !currentTracks.includes(track.id)
+        );
+
+        if (newTrack) {
+        await addTrackToPlaylist(newTrack.id);
+      } else {
+        console.log('No new tracks to add.');
+      }
+      }
     }
-  }, 18000);
+  }, 10000);
 
   function calculateAverageEmotion(emotions) {
     const emotionScores = {};
